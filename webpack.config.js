@@ -1,15 +1,16 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionWebpackPlugin = require('compression-webpack-plugin');
 require('babel-polyfill');
 
 module.exports = {
     devtool: 'eval-source-map',
-    entry: ['babel-polyfill', path.resolve(__dirname, './client/index.js')],
+    entry: ['webpack-hot-middleware/client?reload=true', 'babel-polyfill', path.resolve(__dirname, './client/index.js')],
     output: {
         path: __dirname + '/public',
-        filename: 'js/bundle.js'
+        filename: 'js/bundle.js',
+        publicPath: 'http://127.0.0.1:3000/'
     },
     module: {
         loaders: [{
@@ -28,7 +29,7 @@ module.exports = {
             }
         }, {
             test: /\.css$/,
-            use: ExtractTextPlugin({
+            use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
                 use:[
                     'css-loader', 'less-loader'
@@ -52,6 +53,13 @@ module.exports = {
             ),
             threshold: 10240,
             minRatio: 0.8
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
         })
     ]
 }

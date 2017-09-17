@@ -6,7 +6,7 @@ require('babel-polyfill');
 
 module.exports = {
     devtool: 'eval-source-map',
-    entry: ['webpack-hot-middleware/client?reload=true', 'babel-polyfill', path.resolve(__dirname, './client/index.js')],
+    entry: ['webpack-hot-middleware/client?reload=true', 'babel-polyfill', path.resolve(__dirname, './app/index.js')],
     output: {
         path: __dirname + '/public',
         filename: 'js/bundle.js',

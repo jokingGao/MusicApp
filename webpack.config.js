@@ -4,9 +4,14 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionWebpackPlugin = require('compression-webpack-plugin');
 require('babel-polyfill');
 
+
+const svgDirs = [
+    require.resolve('antd-mobile').replace(/warn\.js$/,''),
+    path.resolve(__dirname, './public/svgs'),
+];
 module.exports = {
     devtool: 'eval-source-map',
-    entry: ['webpack-hot-middleware/client?reload=true', 'babel-polyfill', path.resolve(__dirname, './app/index.js')],
+    entry: ['webpack-hot-middleware/client?reload=true', 'babel-polyfill', path.resolve(__dirname, './client/index.js')],
     output: {
         path: __dirname + '/public',
         filename: 'js/bundle.js',
@@ -41,7 +46,16 @@ module.exports = {
         }, {
             test: /\.(png|jpg)$/,
             loader: 'url-loader?limit=25000'
+        },
+        {
+            test: /\.(svg)$/,
+            loader: 'svg-sprite-loader',
+            include: svgDirs
         }]
+    },
+    resolve: {
+        extensions: ['.web.js', '.js', '.json'],
+        modules: ['node_modules', path.join(__dirname, './node_modules')]
     },
     plugins: [
         new ExtractTextPlugin('css/main.css'),
